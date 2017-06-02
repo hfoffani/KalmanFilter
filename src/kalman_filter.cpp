@@ -65,6 +65,10 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
     hx << c2, atan2(py,px), (px*vx+py*vy)/c2;
 
     VectorXd y = z - hx;
+    // adjust y_phi between -pi and pi;
+    double pi = acos(-1);
+    while (y(1) < -pi) y(1) += 2*pi;
+    while (y(1) > pi)  y(1) -= 2*pi;
 
 
     MatrixXd Ht = H_.transpose();
