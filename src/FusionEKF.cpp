@@ -41,6 +41,31 @@ FusionEKF::FusionEKF() {
   H_laser_ << 1, 0, 0, 0,
               0, 1, 0, 0;
   Hj_ << 0,0,0,0, 0,0,0,0, 0,0,0,0;
+
+  // to check. TODO
+  ekf_.P_ = MatrixXd(4, 4);
+  ekf_.P_ << 1, 0, 0, 0,
+             0, 1, 0, 0,
+             0, 0, 1000, 0,
+             0, 0, 0, 1000;
+
+
+  ekf_.F_ = MatrixXd(4, 4);
+  ekf_.F_ << 1, 0, 1, 0,
+             0, 1, 0, 1,
+             0, 0, 1, 0,
+             0, 0, 0, 1;
+
+  ekf_.H_ = MatrixXd(2, 4);
+  ekf_.H_ << 1, 0, 0, 0,
+             0, 1, 0, 0;
+
+  ekf_.R_ = MatrixXd(2, 2);
+  ekf_.R_ << 0.0225, 0,
+             0, 0.0225;
+
+  ekf_.Q_ = MatrixXd(4, 4);
+  ekf_.Q_ << 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0;
 }
 
 /**
@@ -63,8 +88,10 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     */
     // first measurement
     cout << "EKF: " << endl;
-    ekf_.x_ = VectorXd(4);
-    ekf_.x_ << 1, 1, 1, 1;
+    // ekf_.x_ = VectorXd(4);
+    // ekf_.x_ << 1, 1, 1, 1;
+    ekf_.x_ = measurement_pack.raw_measurements_;
+    previous_timestamp_ = measurement_pack.timestamp_;
 
     if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
       /**
