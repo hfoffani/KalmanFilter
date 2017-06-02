@@ -60,10 +60,6 @@ FusionEKF::FusionEKF() {
   ekf_.H_ << 1, 0, 0, 0,
              0, 1, 0, 0;
 
-  ekf_.R_ = MatrixXd(2, 2);
-  ekf_.R_ << 0.0225, 0,
-             0, 0.0225;
-
   ekf_.Q_ = MatrixXd(4, 4);
   ekf_.Q_ << 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0;
 }
@@ -88,20 +84,23 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     */
     // first measurement
     cout << "EKF: " << endl;
-    // ekf_.x_ = VectorXd(4);
+    ekf_.x_ = VectorXd(4);
     // ekf_.x_ << 1, 1, 1, 1;
-    ekf_.x_ = measurement_pack.raw_measurements_;
     previous_timestamp_ = measurement_pack.timestamp_;
 
     if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
       /**
       Convert radar from polar to cartesian coordinates and initialize state.
       */
+      double rho = measurement_pack.raw_measurements_[0];
+      double phi = measurement_pack.raw_measurements_[1];
+      ekf_.x_ << rho * cos(phi), rho * sin(phi), 0, 0;
     }
     else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
       /**
       Initialize state.
       */
+      ekf_.x_ << measurement_pack.raw_measurements_[0], measurement_pack.raw_measurements_[1], 0, 0;
     }
 
     // done initializing, no need to predict or update
