@@ -3,6 +3,14 @@
 #include "Eigen/Dense"
 
 class KalmanFilter {
+
+private:
+  /**
+   * Updates the state by using Kalman Filter equations
+   * that are common to Standard and Extended.
+   */
+  void update_common_helper(const Eigen::VectorXd &y);
+
 public:
 
   // state vector
