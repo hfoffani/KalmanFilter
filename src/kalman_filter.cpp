@@ -51,6 +51,8 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
     /**
         * update the state by using Extended Kalman Filter equations
     */
+    const float eps = 0.0001;
+
     //recover state parameters
     float px = x_(0);
     float py = x_(1);
@@ -60,11 +62,11 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
     float c1 = px*px+py*py;
     float c2 = sqrt(c1);
 
-    if (fabs(px) < 0.0001) {
+    if (fabs(px) < eps) {
         std::cout << "UpdateEFK() - Division by zero in atan2" << std::endl;
         return;
     }
-    if (c2 < 0.0001) {
+    if (c2 < eps) {
         std::cout << "UpdateEFK() - Division by zero" << std::endl;
         return;
     }
