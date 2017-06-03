@@ -48,6 +48,14 @@ void KalmanFilter::Update(const VectorXd &z) {
     P_ = (I - K * H_) * P_;
 }
 
+
+inline void normalize_angle(double& phi) {
+    /*
+     * adjust phi between -pi and pi;
+     */
+    phi = atan2(sin(phi), cos(phi));
+}
+
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
     /**
         * update the state by using Extended Kalman Filter equations
@@ -67,9 +75,7 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
     hx << c2, atan2(py,px), (px*vx+py*vy)/c2;
 
     VectorXd y = z - hx;
-    // adjust y_phi between -pi and pi;
-    while (y(1) < -M_PI) y(1) += 2*M_PI;
-    while (y(1) > M_PI)  y(1) -= 2*M_PI;
+    normalize_angle(y(1));
 
 
     MatrixXd Ht = H_.transpose();
