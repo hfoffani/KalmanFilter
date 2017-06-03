@@ -60,7 +60,16 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
     float c1 = px*px+py*py;
     float c2 = sqrt(c1);
 
-    MatrixXd hx = MatrixXd(3,1);
+    if (fabs(px) < 0.0001) {
+        std::cout << "UpdateEFK() - Division by zero in atan2" << std::endl;
+        return;
+    }
+    if (c2 < 0.0001) {
+        std::cout << "UpdateEFK() - Division by zero" << std::endl;
+        return;
+    }
+
+    VectorXd hx = VectorXd(3);
     hx << c2, atan2(py,px), (px*vx+py*vy)/c2;
 
     VectorXd y = z - hx;
