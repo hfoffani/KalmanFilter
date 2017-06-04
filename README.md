@@ -9,11 +9,11 @@ This repository includes two files that can be used to set up and intall [uWebSo
 
 Once the install for uWebSocketIO is complete, the main program can be built and ran by doing the following from the project top directory.
 
-1. mkdir build
-2. cd build
-3. cmake ..
-4. make
-5. ./ExtendedKF
+    $ mkdir build
+    $ cd build
+    $ cmake ..
+    $ make
+    $ ./ExtendedKF
 
 Here is the main protcol that main.cpp uses for uWebSocketIO in communicating with the simulator.
 
@@ -24,12 +24,12 @@ INPUT: values provided by the simulator to the c++ program
 
 OUTPUT: values provided by the c++ program to the simulator
 
-["estimate_x"] <= kalman filter estimated position x
-["estimate_y"] <= kalman filter estimated position y
-["rmse_x"]
-["rmse_y"]
-["rmse_vx"]
-["rmse_vy"]
+    ["estimate_x"] <= kalman filter estimated position x
+    ["estimate_y"] <= kalman filter estimated position y
+    ["rmse_x"]
+    ["rmse_y"]
+    ["rmse_vx"]
+    ["rmse_vy"]
 
 ---
 
